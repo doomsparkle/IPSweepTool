@@ -1,3 +1,42 @@
+function Ping-IPSweep {
+    [CmdletBinding()]
+    param (
+
+        # IPv4 Address where you want to start your sweep
+        [Parameter(Mandatory=$true,
+        Position=0,HelpMessage="Provide a starting IPv4 Address.")]
+        [ValidateNotNull()]
+        [ValidateNotNullOrEmpty()]
+        [IPAddress][ValidatePattern("^([1-9]{1,3}|[0-9]{2,}).([0-9]{1,3}).([0-9]{1,3}).([1-9]{1,3}|[0-9]{2,})$")]
+        $StartIP
+
+        # IPv4 Address where you want to end your sweep
+        [Parameter(Mandatory=$true,
+        Position=0,HelpMessage="Provide a ending IPv4 Address.")]
+        [ValidateNotNull()]
+        [ValidateNotNullOrEmpty()]
+        [IPAddress][ValidatePattern("^([1-9]{1,3}|[0-9]{2,}).([0-9]{1,3}).([0-9]{1,3}).([1-9]{1,3}|[0-9]{2,})$")]
+        [IPAddress]$EndIP
+
+        [bool]$ResolveDNS
+
+        [string]$SaveOutput
+
+    )
+
+    begin {
+
+    }
+
+    process {
+
+    }
+
+    end {
+
+    }
+}
+
 $ErrorActionPreference = "SilentlyContinue"; $error.Clear(); $StartIP,$EndIP= $null; $ErrCheck = 0
 $count = 1; $IPTable = @(); $SaveCheck = 0; $SaveFile = $null; $DNSCheck = 0; $DNSReq = $null
 [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
@@ -61,7 +100,7 @@ while ($ErrCheck -eq 0)
         $input1 = $StartIP.IPAddressToString
         if ($input1 -notmatch $valid)
         {
-            Write-Warning "Cannot convert value `"$input1`" to type `"System.Net.IPAddress.`" Error: An invalid IP address was specified."
+            Write-Error "Cannot convert value `"$input1`" to type `"System.Net.IPAddress.`" Error: An invalid IP address was specified."
             $StartIP = $null
         }
     }
@@ -72,7 +111,7 @@ while ($ErrCheck -eq 0)
         $input2 = $EndIP.IPAddressToString
         if ($input2 -notmatch $valid)
         {
-            Write-Warning "Cannot convert value `"$input2`" to type `"System.Net.IPAddress.`" Error: An invalid IP address was specified."
+            Write-Error "Cannot convert value `"$input2`" to type `"System.Net.IPAddress.`" Error: An invalid IP address was specified."
             $EndIP = $null
         }
     }
@@ -87,7 +126,7 @@ while ($ErrCheck -eq 0)
     }
     else
     {
-        Write-Warning "An invalid IP address range was specified."
+        Write-Error "An invalid IP address range was specified."
         $StartIP,$EndIP = $null
     }
 }
